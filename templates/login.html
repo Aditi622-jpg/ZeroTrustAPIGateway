@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Zero Trust API Gateway</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+
+    <style>
+        .input-hint {
+            display: block;
+            margin-top: 7px;
+            margin-bottom: 12px;
+            color: #7dd3fc;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .password-strength {
+            margin-top: 9px;
+            margin-bottom: 12px;
+            padding: 10px 12px;
+            background: #111f33;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: #cbd5e1;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .strength-empty {
+            color: #94a3b8;
+        }
+
+        .strength-weak {
+            color: #ef4444;
+        }
+
+        .strength-medium {
+            color: #f59e0b;
+        }
+
+        .strength-strong {
+            color: #22c55e;
+        }
+
+        .strength-bar {
+            width: 100%;
+            height: 7px;
+            margin-top: 8px;
+            overflow: hidden;
+            background: #1e293b;
+            border-radius: 20px;
+        }
+
+        .strength-fill {
+            width: 0;
+            height: 100%;
+            border-radius: 20px;
+            transition:
+                width 0.25s ease,
+                background 0.25s ease;
+        }
+
+        .password-rules {
+            margin-top: 8px;
+            margin-bottom: 16px;
+            padding: 13px 15px;
+            background: #111f33;
+            border: 1px solid #334155;
+            border-radius: 9px;
+        }
+
+        .password-rules h4 {
+            margin-bottom: 8px;
+            color: #d8b4fe;
+        }
+
+        .password-rules ul {
+            margin: 0;
+            padding-left: 18px;
+            color: #94a3b8;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .password-rules li.rule-valid {
+            color: #86efac;
+        }
+
+        .password-rules li.rule-invalid {
+            color: #94a3b8;
+        }
+
+        .back-home {
+            margin-top: 22px;
+            text-align: center;
+        }
+
+        .back-home a {
+            color: #7dd3fc;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-home a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body class="auth-body">
+
+    <div class="auth-wrapper">
+
+        <div class="auth-card">
+
+            <h1>Zero Trust API Gateway</h1>
+
+            <p class="auth-subtitle">
+                Secure Login and Registration
+            </p>
+
+            {% if message %}
+
+                <div class="success-message">
+                    {{ message }}
+                </div>
+
+            {% endif %}
+
+            {% if error %}
+
+                <div class="error-message">
+                    {{ error }}
+                </div>
+
+            {% endif %}
+
+            <div class="auth-forms">
+
+                <!-- Login Section -->
+                <div class="auth-section">
+
+                    <h2>Login</h2>
+
+                    <form
+                        action="/login"
+                        method="post"
+                    >
+
+                        <label for="login-username">
+                            Username
+                        </label>
+
+                        <input
+                            type="text"
+                            id="login-username"
+                            name="username"
+                            placeholder="Enter username"
+                            autocomplete="username"
+                            required
+                        >
+
+                        <label for="login-password">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="login-password"
+                            name="password"
+                            placeholder="Enter password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="submit"
+                            class="login-button"
+                        >
+                            Login
+                        </button>
+
+                    </form>
+
+                </div>
+
+                <!-- Divider -->
+                <div class="vertical-divider"></div>
+
+                <!-- Register Section -->
+                <div class="auth-section">
+
+                    <h2>Register</h2>
+
+                    <form
+                        action="/register"
+                        method="post"
+                    >
+
+                        <label for="register-username">
+                            Username
+                        </label>
+
+                        <input
+                            type="text"
+                            id="register-username"
+                            name="username"
+                            placeholder="Example: aditi_01"
+                            minlength="4"
+                            maxlength="30"
+                            pattern="[A-Za-z0-9_]+"
+                            title="Use only letters, numbers and underscore"
+                            autocomplete="username"
+                            required
+                        >
+
+                        <span class="input-hint">
+                            Use 4–30 characters. Only letters, numbers
+                            and underscore are allowed.
+                        </span>
+
+                        <label for="register-password">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="register-password"
+                            name="password"
+                            placeholder="Example: Aditi@123"
+                            minlength="8"
+                            maxlength="72"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <div class="password-strength">
+
+                            Password Strength:
+                            <span
+                                id="strength-text"
+                                class="strength-empty"
+                            >
+                                Not entered
+                            </span>
+
+                            <div class="strength-bar">
+                                <div
+                                    id="strength-fill"
+                                    class="strength-fill"
+                                ></div>
+                            </div>
+
+                        </div>
+
+                        <div class="password-rules">
+
+                            <h4>
+                                Password Requirements
+                            </h4>
+
+                            <ul>
+                                <li
+                                    id="rule-length"
+                                    class="rule-invalid"
+                                >
+                                    At least 8 characters
+                                </li>
+
+                                <li
+                                    id="rule-uppercase"
+                                    class="rule-invalid"
+                                >
+                                    At least one uppercase letter
+                                </li>
+
+                                <li
+                                    id="rule-lowercase"
+                                    class="rule-invalid"
+                                >
+                                    At least one lowercase letter
+                                </li>
+
+                                <li
+                                    id="rule-number"
+                                    class="rule-invalid"
+                                >
+                                    At least one number
+                                </li>
+
+                                <li
+                                    id="rule-special"
+                                    class="rule-invalid"
+                                >
+                                    At least one special character
+                                </li>
+                            </ul>
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="register-button"
+                        >
+                            Register
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            <div class="back-home">
+
+                <a href="/">
+                    ← Back to Home
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        const passwordInput =
+            document.getElementById("register-password");
+
+        const strengthText =
+            document.getElementById("strength-text");
+
+        const strengthFill =
+            document.getElementById("strength-fill");
+
+        const ruleLength =
+            document.getElementById("rule-length");
+
+        const ruleUppercase =
+            document.getElementById("rule-uppercase");
+
+        const ruleLowercase =
+            document.getElementById("rule-lowercase");
+
+        const ruleNumber =
+            document.getElementById("rule-number");
+
+        const ruleSpecial =
+            document.getElementById("rule-special");
+
+
+        function updateRule(element, isValid) {
+            if (isValid) {
+                element.classList.remove("rule-invalid");
+                element.classList.add("rule-valid");
+                element.textContent =
+                    "✓ " + element.textContent.replace("✓ ", "");
+            } else {
+                element.classList.remove("rule-valid");
+                element.classList.add("rule-invalid");
+                element.textContent =
+                    element.textContent.replace("✓ ", "");
+            }
+        }
+
+
+        passwordInput.addEventListener(
+            "input",
+            function () {
+                const password = passwordInput.value;
+
+                const hasLength = password.length >= 8;
+                const hasUppercase = /[A-Z]/.test(password);
+                const hasLowercase = /[a-z]/.test(password);
+                const hasNumber = /[0-9]/.test(password);
+                const hasSpecial = /[^A-Za-z0-9]/.test(password);
+
+                updateRule(ruleLength, hasLength);
+                updateRule(ruleUppercase, hasUppercase);
+                updateRule(ruleLowercase, hasLowercase);
+                updateRule(ruleNumber, hasNumber);
+                updateRule(ruleSpecial, hasSpecial);
+
+                let score = 0;
+
+                if (hasLength) {
+                    score++;
+                }
+
+                if (hasUppercase) {
+                    score++;
+                }
+
+                if (hasLowercase) {
+                    score++;
+                }
+
+                if (hasNumber) {
+                    score++;
+                }
+
+                if (hasSpecial) {
+                    score++;
+                }
+
+                strengthText.className = "";
+
+                if (password.length === 0) {
+                    strengthText.textContent = "Not entered";
+                    strengthText.classList.add("strength-empty");
+
+                    strengthFill.style.width = "0";
+                    strengthFill.style.background = "#334155";
+                } else if (score <= 2) {
+                    strengthText.textContent = "Weak";
+                    strengthText.classList.add("strength-weak");
+
+                    strengthFill.style.width = "33%";
+                    strengthFill.style.background = "#ef4444";
+                } else if (score <= 4) {
+                    strengthText.textContent = "Medium";
+                    strengthText.classList.add("strength-medium");
+
+                    strengthFill.style.width = "66%";
+                    strengthFill.style.background = "#f59e0b";
+                } else {
+                    strengthText.textContent = "Strong";
+                    strengthText.classList.add("strength-strong");
+
+                    strengthFill.style.width = "100%";
+                    strengthFill.style.background = "#22c55e";
+                }
+            }
+        );
+    </script>
+
+</body>
+
+</html>

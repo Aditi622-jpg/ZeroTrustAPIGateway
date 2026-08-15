@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Access Denied</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+</head>
+
+<body>
+
+    <div class="denied-page">
+
+        <div class="denied-card">
+
+            <div class="denied-icon">!</div>
+
+            <span class="status-pill danger">
+                Access Denied
+            </span>
+
+            <h1>Administrator Permission Required</h1>
+
+            <p>
+                The account <strong>{{ username }}</strong> has the role
+                <strong>{{ role }}</strong>. This resource is available
+                only to administrators.
+            </p>
+
+            <div class="denied-details">
+
+                <div>
+                    <span>JWT Authentication</span>
+                    <strong class="text-success">Passed</strong>
+                </div>
+
+                <div>
+                    <span>Role Verification</span>
+                    <strong class="text-danger">Failed</strong>
+                </div>
+
+                <div>
+                    <span>Required Role</span>
+                    <strong>Admin</strong>
+                </div>
+
+            </div>
+
+            <a href="/dashboard" class="primary-link">
+                Return to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

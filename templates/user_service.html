@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>User Service</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+</head>
+
+<body>
+
+    <div class="app-layout">
+
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">ZT</div>
+
+                <div>
+                    <h2>ZeroTrust</h2>
+                    <p>API Gateway</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <a href="/dashboard" class="menu-item">
+                    Dashboard
+                </a>
+
+                <a href="/gateway/status" class="menu-item">
+                    Gateway Status
+                </a>
+
+                <a href="/gateway/user-service" class="menu-item active">
+                    User Service
+                </a>
+
+                <a href="/gateway/admin-service" class="menu-item">
+                    Admin Panel
+                </a>
+
+                <a href="/logout" class="menu-item logout-menu">
+                    Logout
+                </a>
+
+            </nav>
+
+        </aside>
+
+        <main class="main-content">
+
+            <header class="topbar">
+
+                <div>
+                    <p class="page-label">Protected Microservice</p>
+                    <h1>User Service</h1>
+                </div>
+
+                <a href="/dashboard" class="back-button">
+                    Back to Dashboard
+                </a>
+
+            </header>
+
+            <section class="welcome-panel">
+
+                <div>
+                    <span class="status-pill success">
+                        Access Authorized
+                    </span>
+
+                    <h2>User Service Connected</h2>
+
+                    <p>
+                        Your authenticated request was securely routed
+                        through the Zero Trust API Gateway.
+                    </p>
+                </div>
+
+                <div class="shield-icon">
+                    ✓
+                </div>
+
+            </section>
+
+            <section class="content-grid">
+
+                <div class="panel">
+
+                    <p class="page-label">User Profile</p>
+                    <h2>Account Information</h2>
+
+                    <div class="profile-large">
+
+                        <div class="large-avatar">
+                            {{ username[0]|upper }}
+                        </div>
+
+                        <div>
+                            <h3>{{ username }}</h3>
+                            <p>{{ role }} Account</p>
+                        </div>
+
+                    </div>
+
+                    <div class="security-row">
+                        <span>Username</span>
+                        <strong>{{ username }}</strong>
+                    </div>
+
+                    <div class="security-row">
+                        <span>Assigned Role</span>
+                        <strong>{{ role }}</strong>
+                    </div>
+
+                    <div class="security-row">
+                        <span>Service Access</span>
+                        <strong class="text-success">Allowed</strong>
+                    </div>
+
+                </div>
+
+                <div class="panel">
+
+                    <p class="page-label">Service Permissions</p>
+                    <h2>Available Actions</h2>
+
+                    <div class="permission-item">
+                        <div class="permission-check">✓</div>
+
+                        <div>
+                            <h3>View Profile</h3>
+                            <p>Read authenticated account information.</p>
+                        </div>
+                    </div>
+
+                    <div class="permission-item">
+                        <div class="permission-check">✓</div>
+
+                        <div>
+                            <h3>Access User Resources</h3>
+                            <p>Use protected user-level API services.</p>
+                        </div>
+                    </div>
+
+                    <div class="permission-item">
+                        <div class="permission-check">✓</div>
+
+                        <div>
+                            <h3>JWT Authentication</h3>
+                            <p>All requests require a valid security token.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+</html>

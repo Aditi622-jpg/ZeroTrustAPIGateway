@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin Control Panel</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+</head>
+
+<body>
+
+    <div class="app-layout">
+
+        <aside class="sidebar">
+
+            <div class="brand">
+
+                <div class="brand-icon admin-brand">
+                    AD
+                </div>
+
+                <div>
+                    <h2>Admin Console</h2>
+                    <p>Zero Trust Gateway</p>
+                </div>
+
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <a
+                    href="/dashboard"
+                    class="menu-item"
+                >
+                    Dashboard
+                </a>
+
+                <a
+                    href="/gateway/status"
+                    class="menu-item"
+                >
+                    Gateway Status
+                </a>
+
+                <a
+                    href="/gateway/user-service"
+                    class="menu-item"
+                >
+                    User Service
+                </a>
+
+                <a
+                    href="/gateway/admin-service"
+                    class="menu-item active"
+                >
+                    Admin Panel
+                </a>
+
+                <a
+                    href="/gateway/user-management"
+                    class="menu-item"
+                >
+                    User Management
+                </a>
+
+                <a
+                    href="/gateway/service-management"
+                    class="menu-item"
+                >
+                    Service Management
+                </a>
+
+                <a
+                    href="/gateway/audit-logs"
+                    class="menu-item"
+                >
+                    Security Logs
+                </a>
+
+                <a
+                    href="/gateway/monitoring"
+                    class="menu-item"
+                >
+                    API Monitoring
+                </a>
+
+                <a
+                    href="/gateway/anomaly-detection"
+                    class="menu-item"
+                >
+                    ML Anomaly Detection
+                </a>
+
+                <a
+                    href="/logout"
+                    class="menu-item logout-menu"
+                >
+                    Logout
+                </a>
+
+            </nav>
+
+        </aside>
+
+        <main class="main-content">
+
+            <header class="topbar">
+
+                <div>
+                    <p class="page-label">
+                        Restricted Area
+                    </p>
+
+                    <h1>
+                        Admin Control Panel
+                    </h1>
+                </div>
+
+                <div class="admin-badge">
+                    Administrator
+                </div>
+
+            </header>
+
+            <section class="admin-hero">
+
+                <div>
+
+                    <span class="status-pill purple">
+                        Privileged Access Granted
+                    </span>
+
+                    <h2>
+                        Welcome, {{ username }}
+                    </h2>
+
+                    <p>
+                        Your administrator identity and role have been
+                        verified through JWT authentication and
+                        role-based access control.
+                    </p>
+
+                </div>
+
+                <div class="admin-shield">
+                    A
+                </div>
+
+            </section>
+
+            <section class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        US
+                    </div>
+
+                    <div>
+                        <p>User Management</p>
+
+                        <h3>
+                            Active
+                        </h3>
+
+                        <span class="small-success">
+                            Available
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        SR
+                    </div>
+
+                    <div>
+                        <p>Service Management</p>
+
+                        <h3>
+                            Active
+                        </h3>
+
+                        <span class="small-success">
+                            Available
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        ML
+                    </div>
+
+                    <div>
+                        <p>Anomaly Detection</p>
+
+                        <h3>
+                            Enabled
+                        </h3>
+
+                        <span class="small-success">
+                            Isolation Forest
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        RB
+                    </div>
+
+                    <div>
+                        <p>Current Role</p>
+
+                        <h3>
+                            {{ role }}
+                        </h3>
+
+                        <span class="small-success">
+                            Verified
+                        </span>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="content-grid">
+
+                <div class="panel">
+
+                    <p class="page-label">
+                        Administrative Tools
+                    </p>
+
+                    <h2>
+                        System Controls
+                    </h2>
+
+                    <div class="admin-actions">
+
+                        <!-- User Management -->
+                        <div class="admin-action-card">
+
+                            <div class="action-icon">
+                                01
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    User Management
+                                </h3>
+
+                                <p>
+                                    Create, view, update and delete user
+                                    accounts and manage user roles.
+                                </p>
+
+                            </div>
+
+                            <a
+                                href="/gateway/user-management"
+                                class="small-button"
+                            >
+                                Open
+                            </a>
+
+                        </div>
+
+                        <!-- Security Logs -->
+                        <div class="admin-action-card">
+
+                            <div class="action-icon">
+                                02
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Security Audit Logs
+                                </h3>
+
+                                <p>
+                                    Review login attempts, denied access,
+                                    administrative actions and export reports.
+                                </p>
+
+                            </div>
+
+                            <a
+                                href="/gateway/audit-logs"
+                                class="small-button"
+                            >
+                                Open
+                            </a>
+
+                        </div>
+
+                        <!-- Service Management -->
+                        <div class="admin-action-card">
+
+                            <div class="action-icon">
+                                03
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Service Management
+                                </h3>
+
+                                <p>
+                                    Register, update, monitor and remove
+                                    services protected by the API Gateway.
+                                </p>
+
+                            </div>
+
+                            <a
+                                href="/gateway/service-management"
+                                class="small-button"
+                            >
+                                Open
+                            </a>
+
+                        </div>
+
+                        <!-- API Monitoring -->
+                        <div class="admin-action-card">
+
+                            <div class="action-icon">
+                                04
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    API Monitoring Dashboard
+                                </h3>
+
+                                <p>
+                                    View API traffic, allowed and denied
+                                    requests, endpoint usage and gateway health.
+                                </p>
+
+                            </div>
+
+                            <a
+                                href="/gateway/monitoring"
+                                class="small-button"
+                            >
+                                Open
+                            </a>
+
+                        </div>
+
+                        <!-- ML Anomaly Detection -->
+                        <div class="admin-action-card">
+
+                            <div class="action-icon">
+                                05
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    ML Anomaly Detection
+                                </h3>
+
+                                <p>
+                                    Analyse API activity, failed logins,
+                                    denied requests and rate-limit events
+                                    using Isolation Forest.
+                                </p>
+
+                            </div>
+
+                            <a
+                                href="/gateway/anomaly-detection"
+                                class="small-button"
+                            >
+                                Open
+                            </a>
+
+                        </div>
+
+                        <!-- Gateway Status -->
+                        <div class="admin-action-card">
+
+                            <div class="action-icon">
+                                06
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Gateway Status
+                                </h3>
+
+                                <p>
+                                    Check identity verification,
+                                    authentication, authorization and
+                                    Zero Trust gateway status.
+                                </p>
+
+                            </div>
+
+                            <a
+                                href="/gateway/status"
+                                class="small-button"
+                            >
+                                Open
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="panel">
+
+                    <p class="page-label">
+                        Administrator Session
+                    </p>
+
+                    <h2>
+                        Access Details
+                    </h2>
+
+                    <div class="security-row">
+
+                        <span>
+                            Administrator
+                        </span>
+
+                        <strong>
+                            {{ username }}
+                        </strong>
+
+                    </div>
+
+                    <div class="security-row">
+
+                        <span>
+                            Role
+                        </span>
+
+                        <strong>
+                            {{ role }}
+                        </strong>
+
+                    </div>
+
+                    <div class="security-row">
+
+                        <span>
+                            JWT Token
+                        </span>
+
+                        <strong class="text-success">
+                            Verified
+                        </strong>
+
+                    </div>
+
+                    <div class="security-row">
+
+                        <span>
+                            RBAC Check
+                        </span>
+
+                        <strong class="text-success">
+                            Passed
+                        </strong>
+
+                    </div>
+
+                    <div class="security-row">
+
+                        <span>
+                            Rate Limiting
+                        </span>
+
+                        <strong class="text-success">
+                            Enabled
+                        </strong>
+
+                    </div>
+
+                    <div class="security-row">
+
+                        <span>
+                            API Analytics
+                        </span>
+
+                        <strong class="text-success">
+                            Enabled
+                        </strong>
+
+                    </div>
+
+                    <div class="security-row">
+
+                        <span>
+                            ML Detection
+                        </span>
+
+                        <strong class="text-success">
+                            Enabled
+                        </strong>
+
+                    </div>
+
+                    <div class="security-row">
+
+                        <span>
+                            Privilege Level
+                        </span>
+
+                        <strong class="text-purple">
+                            Administrator
+                        </strong>
+
+                    </div>
+
+                    <div class="zero-trust-note purple-note">
+
+                        Administrator access is granted only after
+                        verifying the user's identity, JWT token and
+                        assigned role. Sensitive management modules
+                        remain protected through administrator-only
+                        authorization checks.
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

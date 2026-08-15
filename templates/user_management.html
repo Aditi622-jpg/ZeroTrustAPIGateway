@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>User Management</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+
+    <style>
+        .management-page {
+            min-height: 100vh;
+            padding: 35px 20px;
+            background:
+                radial-gradient(
+                    circle at top right,
+                    rgba(124, 58, 237, 0.16),
+                    transparent 35%
+                ),
+                #07111f;
+        }
+
+        .management-container {
+            width: 100%;
+            max-width: 1250px;
+            margin: 0 auto;
+        }
+
+        .management-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 25px;
+            background: #0f1b2d;
+            border: 1px solid #4c1d95;
+            border-radius: 16px;
+        }
+
+        .management-header h1 {
+            margin: 7px 0;
+            color: white;
+        }
+
+        .management-header p {
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .admin-label {
+            padding: 12px 18px;
+            color: #d8b4fe;
+            background: #2e1065;
+            border: 1px solid #7c3aed;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .management-message,
+        .management-error {
+            margin-top: 20px;
+            padding: 13px;
+            text-align: center;
+            border-radius: 9px;
+        }
+
+        .management-message {
+            color: #bbf7d0;
+            background: rgba(20, 83, 45, 0.7);
+            border: 1px solid #22c55e;
+        }
+
+        .management-error {
+            color: #fecaca;
+            background: rgba(127, 29, 29, 0.75);
+            border: 1px solid #ef4444;
+        }
+
+        .create-panel {
+            margin: 22px 0;
+            padding: 24px;
+            background: #0f1b2d;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+        }
+
+        .create-panel h2 {
+            margin-bottom: 18px;
+            color: white;
+        }
+
+        .create-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr 180px auto;
+            gap: 12px;
+        }
+
+        .create-form input,
+        .create-form select,
+        .edit-form input,
+        .edit-form select {
+            width: 100%;
+            padding: 11px;
+            color: white;
+            background: #111f33;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .create-form input:focus,
+        .create-form select:focus,
+        .edit-form input:focus,
+        .edit-form select:focus {
+            border-color: #38bdf8;
+        }
+
+        .create-button,
+        .update-button,
+        .delete-button,
+        .navigation-button {
+            padding: 11px 17px;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .create-button {
+            background: #0284c7;
+        }
+
+        .create-button:hover {
+            background: #0369a1;
+        }
+
+        .update-button {
+            background: #7c3aed;
+        }
+
+        .update-button:hover {
+            background: #6d28d9;
+        }
+
+        .delete-button {
+            background: #dc2626;
+        }
+
+        .delete-button:hover {
+            background: #b91c1c;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            background: #0f1b2d;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+        }
+
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .user-table th,
+        .user-table td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #1e293b;
+            vertical-align: top;
+        }
+
+        .user-table th {
+            color: #7dd3fc;
+            background: #111f33;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        .user-table td {
+            color: #cbd5e1;
+        }
+
+        .user-table tbody tr:hover {
+            background: #111f33;
+        }
+
+        .edit-form {
+            display: grid;
+            grid-template-columns: 1fr 130px 1fr auto;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .role-admin {
+            color: #d8b4fe;
+            background: #2e1065;
+            border: 1px solid #7c3aed;
+        }
+
+        .role-user {
+            color: #7dd3fc;
+            background: #082f49;
+            border: 1px solid #0284c7;
+        }
+
+        .active-badge {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 6px 11px;
+            color: #86efac;
+            background: rgba(22, 101, 52, 0.4);
+            border: 1px solid #166534;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .delete-form {
+            margin-top: 8px;
+        }
+
+        .management-navigation {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .navigation-button {
+            background: #0284c7;
+        }
+
+        .navigation-button:hover {
+            background: #0369a1;
+        }
+
+        .navigation-button.admin {
+            background: #7c3aed;
+        }
+
+        .navigation-button.admin:hover {
+            background: #6d28d9;
+        }
+
+        .empty-users {
+            padding: 35px !important;
+            text-align: center !important;
+            color: #64748b !important;
+        }
+
+        @media screen and (max-width: 950px) {
+            .create-form,
+            .edit-form {
+                grid-template-columns: 1fr;
+            }
+
+            .management-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .admin-label {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="management-page">
+
+        <div class="management-container">
+
+            <header class="management-header">
+
+                <div>
+
+                    <p class="page-label">
+                        Administrator Controls
+                    </p>
+
+                    <h1>
+                        User Management
+                    </h1>
+
+                    <p>
+                        Create, view, update and delete registered users.
+                        These operations are available only to administrators.
+                    </p>
+
+                </div>
+
+                <div class="admin-label">
+                    {{ username }} — {{ role }}
+                </div>
+
+            </header>
+
+            {% if message %}
+
+                <div class="management-message">
+                    {{ message }}
+                </div>
+
+            {% endif %}
+
+            {% if error %}
+
+                <div class="management-error">
+                    {{ error }}
+                </div>
+
+            {% endif %}
+
+            <section class="create-panel">
+
+                <h2>
+                    Create New User
+                </h2>
+
+                <form
+                    action="/gateway/user-management/create"
+                    method="post"
+                    class="create-form"
+                >
+
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Enter username"
+                        required
+                    >
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter password"
+                        required
+                    >
+
+                    <select
+                        name="role"
+                        required
+                    >
+                        <option value="User">
+                            User
+                        </option>
+
+                        <option value="Admin">
+                            Admin
+                        </option>
+                    </select>
+
+                    <button
+                        type="submit"
+                        class="create-button"
+                    >
+                        Add User
+                    </button>
+
+                </form>
+
+            </section>
+
+            <section class="table-wrapper">
+
+                <table class="user-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Current User</th>
+                            <th>Edit User</th>
+                            <th>Delete User</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for user in users %}
+
+                            <tr>
+
+                                <td>
+                                    {{ user.id }}
+                                </td>
+
+                                <td>
+
+                                    <strong>
+                                        {{ user.username }}
+                                    </strong>
+
+                                    <br><br>
+
+                                    {% if user.role == "Admin" %}
+
+                                        <span class="role-badge role-admin">
+                                            Admin
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="role-badge role-user">
+                                            User
+                                        </span>
+
+                                    {% endif %}
+
+                                    <br>
+
+                                    <span class="active-badge">
+                                        Active
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <form
+                                        action="/gateway/user-management/{{ user.id }}/update"
+                                        method="post"
+                                        class="edit-form"
+                                    >
+
+                                        <input
+                                            type="text"
+                                            name="username"
+                                            value="{{ user.username }}"
+                                            required
+                                        >
+
+                                        <select
+                                            name="role"
+                                            required
+                                        >
+
+                                            <option
+                                                value="User"
+                                                {% if user.role == "User" %}
+                                                    selected
+                                                {% endif %}
+                                            >
+                                                User
+                                            </option>
+
+                                            <option
+                                                value="Admin"
+                                                {% if user.role == "Admin" %}
+                                                    selected
+                                                {% endif %}
+                                            >
+                                                Admin
+                                            </option>
+
+                                        </select>
+
+                                        <input
+                                            type="password"
+                                            name="new_password"
+                                            placeholder="New password (optional)"
+                                        >
+
+                                        <button
+                                            type="submit"
+                                            class="update-button"
+                                        >
+                                            Update
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                                <td>
+
+                                    {% if user.username == username %}
+
+                                        <span class="role-badge role-admin">
+                                            Current Admin
+                                        </span>
+
+                                    {% else %}
+
+                                        <form
+                                            action="/gateway/user-management/{{ user.id }}/delete"
+                                            method="post"
+                                            class="delete-form"
+                                            onsubmit="return confirm('Are you sure you want to delete this user?');"
+                                        >
+
+                                            <button
+                                                type="submit"
+                                                class="delete-button"
+                                            >
+                                                Delete
+                                            </button>
+
+                                        </form>
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% else %}
+
+                            <tr>
+
+                                <td
+                                    colspan="4"
+                                    class="empty-users"
+                                >
+                                    No registered users are available.
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+            <div class="management-navigation">
+
+                <a
+                    href="/gateway/admin-service"
+                    class="navigation-button admin"
+                >
+                    Admin Panel
+                </a>
+
+                <a
+                    href="/gateway/audit-logs"
+                    class="navigation-button admin"
+                >
+                    Security Logs
+                </a>
+
+                <a
+                    href="/gateway/monitoring"
+                    class="navigation-button admin"
+                >
+                    API Monitoring
+                </a>
+
+                <a
+                    href="/dashboard"
+                    class="navigation-button"
+                >
+                    Dashboard
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
