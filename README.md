@@ -1,28 +1,38 @@
 # 🔐 Zero Trust API Gateway
 
-A security-focused **Zero Trust API Gateway** built using **FastAPI, Python, SQLAlchemy, SQLite, HTML, CSS, Jinja2, JWT authentication, and Scikit-learn**.
+A security-focused **Zero Trust API Gateway** developed using **FastAPI, Python, SQLAlchemy, SQLite, HTML, CSS, Jinja2, JWT authentication, and Scikit-learn**.
 
-The project follows the **Zero Trust principle — "Never Trust, Always Verify."** Every protected request is verified before access is granted based on authentication, authorization, user role, and security checks.
+The project follows the Zero Trust security principle:
 
-The system also includes API monitoring, audit logging, administrative controls, and machine learning-based anomaly detection.
+> **Never Trust, Always Verify**
+
+Instead of automatically trusting a user after login, the system verifies authentication, authorization, roles, and permissions before allowing access to protected services.
+
+The application also provides **security audit logging, API monitoring, administrative controls, analytics, and machine learning-based anomaly detection**.
 
 ---
 
-# 📌 Project Overview
+## 📌 Project Overview
 
-Modern applications rely heavily on APIs for communication between users, services, and databases. If API access is not properly protected, unauthorized users may gain access to sensitive resources.
+Modern applications rely heavily on APIs for communication between users, applications, databases, and backend services. Improperly protected APIs can expose sensitive resources to unauthorized users.
 
-This project implements a **Zero Trust API Gateway** that verifies each request before allowing access to protected services.
+The **Zero Trust API Gateway** acts as a centralized security layer between users and protected services.
 
-The gateway performs:
+When a user attempts to access a protected resource, the gateway performs security checks before deciding whether the request should be allowed or denied.
 
-* User authentication
+The gateway provides:
+
+* Secure user authentication
 * JWT token verification
-* Role verification
-* Access control
-* Security logging
-* API monitoring
-* Anomaly detection
+* Role-Based Access Control (RBAC)
+* Zero Trust access verification
+* Protected API services
+* Administrative controls
+* Security audit logging
+* API activity monitoring
+* Security analytics
+* Machine learning-based anomaly detection
+* CSV audit log export
 
 ---
 
@@ -30,119 +40,180 @@ The gateway performs:
 
 ## 🔑 Secure Authentication
 
-* User registration and secure login
+The application provides secure registration and login functionality.
+
+Features include:
+
+* User registration
+* Secure login
 * JWT-based authentication
 * Username validation
-* Strong password policy
+* Strong password requirements
 * Real-time password strength indicator
 * Secure password hashing using PBKDF2
+
+After successful login, authentication information is used to verify access to protected resources.
 
 ---
 
 ## 🔒 Password Security
 
-User passwords are not stored directly in the database.
+Passwords are not stored directly as plain text.
 
-Passwords are securely hashed using **PBKDF2 through Passlib** before being stored.
+The application uses **PBKDF2 through Passlib** to securely hash user passwords before they are stored.
+
+During login, the entered password is verified against the stored password hash.
+
+---
+
+## 🎫 JWT Authentication
+
+The project uses **JSON Web Tokens (JWT)** for authentication.
+
+After successful authentication, a JWT can be used to identify and verify the user when accessing protected resources.
+
+This allows the gateway to determine whether the request comes from an authenticated user.
 
 ---
 
 ## 👥 Role-Based Access Control (RBAC)
 
-The system provides separate permissions for **Admin** and **User** roles.
+The application separates users according to their roles.
 
-### User
+### 👤 User
 
-Authenticated users can access authorized user services and protected resources.
+Authenticated users can access services and resources that are authorized for normal users.
 
-### Admin
+### 👨‍💻 Admin
 
-Administrators can:
+Administrators have additional privileges, including:
 
-* Manage users
-* Manage services
-* View security logs
-* Monitor gateway activity
-* Access administrative services
+* User management
+* Service management
+* Administrative services
+* Security audit log access
+* API monitoring
+* Security analytics
+
+A normal user cannot access resources restricted to administrators.
 
 ---
 
-# 🛡️ Zero Trust Verification
+# 🛡️ Zero Trust Access Verification
 
-Every protected request passes through a security verification process.
+Every protected request goes through security verification before access is granted.
 
-```text id="wt0l5i"
-API Request
+```text
+User Request
      ↓
-JWT Verification
+FastAPI Endpoint
      ↓
-User Verification
+Zero Trust Gateway
      ↓
-Role / Permission Check
+JWT / Authentication Check
+     ↓
+User Identity Verification
+     ↓
+Role & Permission Check
      ↓
 Access Decision
-    ↙     ↘
- ALLOW    DENY
+    ↙             ↘
+GRANTED          DENIED
+   ↓
+Protected Service
 ```
 
-This follows the Zero Trust concept that authentication alone should not automatically provide access to every resource.
+This means that simply being logged in does not automatically give a user access to every service.
+
+---
+
+# 🌐 API Gateway
+
+The **API Gateway** acts as the central security checkpoint for protected services.
+
+The frontend communicates with the FastAPI backend through application routes/endpoints.
+
+Before protected functionality is accessed, the gateway can perform checks such as:
+
+* Is the user authenticated?
+* Is the authentication information valid?
+* What role does the user have?
+* Does the user have permission to access this service?
+* Should the request be allowed or denied?
+* Should the activity be recorded for security monitoring?
+
+This creates a centralized security layer for application access.
 
 ---
 
 # 🌐 Protected Services
 
-The project includes:
+The application contains multiple protected areas, including:
 
-* Gateway Status
-* User Service
-* Admin Service
-* User Management
-* Service Management
-* Monitoring Dashboard
-* Security Audit Logs
+### Gateway Status
+
+Displays information about the operational status of the API Gateway.
+
+### User Service
+
+Provides protected functionality for authenticated and authorized users.
+
+### Admin Service
+
+Provides restricted functionality that can only be accessed by administrators.
 
 ---
 
 # 👨‍💻 Admin User Management
 
-Administrators can perform CRUD operations on users:
+Administrators can manage users from the administrative interface.
+
+Supported operations include:
 
 * Create users
 * View users
-* Update users
+* Update user information
 * Delete users
 * Manage user roles
+
+This provides centralized control over application users.
 
 ---
 
 # ⚙️ Service Management
 
-Administrators can manage protected services and their security configurations.
+The administrator can manage services protected by the Zero Trust Gateway.
+
+Service management provides control over protected resources and their associated security settings.
 
 ---
 
 # 📋 Security Audit Logging
 
-Important security activities are recorded, including:
+The application records important security-related events.
 
-* Successful logins
+Examples include:
+
+* Successful login attempts
 * Failed login attempts
 * Gateway access
 * Protected service access
 * Access denied events
 * Administrative actions
-* User management operations
+* User management actions
 * System events
 
-These logs can assist with security monitoring and investigation.
+Audit logging provides a record of important activity occurring within the application.
 
 ---
 
-# 📊 API Monitoring Dashboard
+# 📊 API Monitoring & Analytics
 
-The monitoring dashboard provides information about:
+The application includes monitoring and analytics functionality for observing API and gateway activity.
 
-* Total API requests
+Information can include:
+
+* API request statistics
 * Gateway health
 * Service status
 * Endpoint usage
@@ -150,17 +221,7 @@ The monitoring dashboard provides information about:
 * Security events
 * User activity
 
----
-
-# 📁 CSV Export
-
-Security audit logs can be exported in **CSV format** for:
-
-* Security analysis
-* Reporting
-* Compliance
-* Documentation
-* Incident investigation
+This allows administrators to understand how protected services are being accessed.
 
 ---
 
@@ -168,40 +229,217 @@ Security audit logs can be exported in **CSV format** for:
 
 The project integrates **Scikit-learn** for anomaly detection.
 
-The system analyzes application activity to identify potentially unusual or suspicious access patterns.
+The anomaly detection component analyzes application activity to identify potentially unusual access patterns.
 
-Examples include:
+Examples of activity that may be identified as unusual include:
 
 * Excessive request activity
-* Unusual API usage
-* Unexpected access patterns
-* Abnormal user activity
+* Abnormal API usage
+* Unexpected user behavior
+* Unusual access patterns
+
+Suspicious activity can then be highlighted for further security investigation.
+
+---
+
+# 📁 CSV Audit Log Export
+
+Security audit logs can be exported in **CSV format**.
+
+Exported logs can be used for:
+
+* Security analysis
+* Reporting
+* Documentation
+* Compliance-related activities
+* Incident investigation
 
 ---
 
 # 🏗️ System Architecture
 
-```text id="10l3mh"
-                User / Administrator
-                        ↓
-               HTML / CSS Dashboard
-                        ↓
-                  FastAPI Backend
-                        ↓
-             Zero Trust API Gateway
-                        ↓
-            JWT + Role Verification
-                        ↓
-                Access Decision
-                   ↙        ↘
-               Granted     Denied
-                  ↓
-            Protected Service
-                  ↓
-              SQLAlchemy
-                  ↓
-                SQLite
+```text
+               User / Administrator
+                       ↓
+              HTML / CSS Frontend
+                       ↓
+                Jinja2 Templates
+                       ↓
+                 FastAPI Backend
+                       ↓
+              Zero Trust Gateway
+                       ↓
+          ┌────────────┼────────────┐
+          ↓            ↓            ↓
+    Authentication    RBAC       Audit Logging
+          ↓            ↓
+          └──────┬─────┘
+                 ↓
+           Access Decision
+             ↙       ↘
+          ALLOW      DENY
+            ↓
+      Protected Service
+            ↓
+        SQLAlchemy
+            ↓
+          SQLite
 ```
+
+Monitoring, analytics, and anomaly detection provide additional visibility into application activity.
+
+---
+
+# 🔄 Application Workflow
+
+```text
+Registration
+     ↓
+Input Validation
+     ↓
+Password Hashing
+     ↓
+Database Storage
+     ↓
+Login
+     ↓
+Credential Verification
+     ↓
+JWT Authentication
+     ↓
+Protected Request
+     ↓
+Zero Trust Gateway
+     ↓
+Authentication Verification
+     ↓
+Role / Permission Verification
+     ↓
+Access Granted / Denied
+     ↓
+Security Event Logged
+     ↓
+Monitoring & Analytics
+     ↓
+Anomaly Detection
+```
+
+---
+
+# 📂 Project Structure
+
+```text
+ZeroTrustAPI/
+│
+├── database/
+├── logs/
+├── static/
+├── templates/
+│
+├── admin.py
+├── analytics.py
+├── anomaly_detection.html
+├── anomaly_detector.py
+├── audit.py
+├── auth.py
+├── create_admin.py
+├── database.py
+├── gateway.py
+├── main.py
+├── requirements.txt
+└── README.md
+```
+
+> `__pycache__/` and Python `.pyc` files are generated automatically and do not need to be included in the repository.
+
+---
+
+# 📚 Main Project Modules
+
+## `main.py`
+
+The main entry point of the FastAPI application.
+
+It connects the application's different components and starts the main application.
+
+---
+
+## `gateway.py`
+
+Contains the core **Zero Trust Gateway** functionality.
+
+It handles security-related gateway operations and protected service access.
+
+---
+
+## `auth.py`
+
+Handles authentication and security functionality such as:
+
+* User authentication
+* Password handling
+* JWT-related authentication
+* Security verification
+
+---
+
+## `admin.py`
+
+Contains functionality related to administrator operations and administrative access.
+
+---
+
+## `create_admin.py`
+
+Used for creating or initializing an administrator account.
+
+---
+
+## `audit.py`
+
+Handles security audit logging and records important application/security events.
+
+---
+
+## `analytics.py`
+
+Provides functionality related to API activity and security analytics.
+
+---
+
+## `anomaly_detector.py`
+
+Contains the machine learning-based anomaly detection functionality used to identify unusual activity.
+
+---
+
+## `database.py`
+
+Handles the database configuration and communication between the application and the SQLite database using SQLAlchemy.
+
+---
+
+## `templates/`
+
+Contains the **Jinja2 HTML templates** used for the application's frontend pages.
+
+---
+
+## `static/`
+
+Contains static frontend resources such as CSS and other assets.
+
+---
+
+## `logs/`
+
+Contains application/security log information generated by the system.
+
+---
+
+## `database/`
+
+Contains database-related application data.
 
 ---
 
@@ -211,30 +449,38 @@ Examples include:
 | ------------ | ---------------------------------- |
 | Python       | Core programming language          |
 | FastAPI      | Backend and API development        |
-| Uvicorn      | ASGI server                        |
+| Uvicorn      | ASGI server for running FastAPI    |
 | SQLAlchemy   | Database ORM                       |
 | SQLite       | Application database               |
 | JWT          | Token-based authentication         |
 | Passlib      | Password security                  |
-| PBKDF2       | Password hashing                   |
+| PBKDF2       | Secure password hashing            |
 | Jinja2       | Dynamic HTML templates             |
 | HTML         | Frontend structure                 |
 | CSS          | Frontend styling                   |
 | Scikit-learn | Machine learning anomaly detection |
+| NumPy        | Numerical processing               |
+| Pandas       | Data processing and analysis       |
 
 ---
 
 # 📦 Dependencies
 
-Install the required dependencies:
+Install the required dependencies using:
 
-```bash id="5w9fhr"
+```bash
 pip install fastapi uvicorn sqlalchemy jinja2 python-multipart passlib pyjwt scikit-learn numpy pandas
 ```
 
-### requirements.txt
+Alternatively, if `requirements.txt` is included:
 
-```text id="mhudrd"
+```bash
+pip install -r requirements.txt
+```
+
+### `requirements.txt`
+
+```text
 fastapi
 uvicorn
 sqlalchemy
@@ -247,166 +493,141 @@ numpy
 pandas
 ```
 
-Dependencies can also be installed using:
-
-```bash id="tcfgu6"
-pip install -r requirements.txt
-```
-
 ---
 
 # ▶️ Run the Application
 
-Run the FastAPI application using:
+Start the FastAPI application using Uvicorn:
 
-```bash id="z0rlyi"
-python -m uvicorn app:app --reload
+```bash
+python -m uvicorn main:app --reload
 ```
 
-After the server starts, open:
+After the server starts, open the application at:
 
-```text id="y9ub3r"
+```text
 http://127.0.0.1:8000
 ```
 
-### API Documentation
+---
 
-FastAPI Swagger documentation can be accessed at:
+# 🔐 Demo Admin Login
 
-```text id="9fbr91"
+For testing the administrative functionality of the project, the local demonstration account is:
+
+```text
+Username: admin01
+Password: Admin@123
+```
+
+The administrator account can be used to access administrative functionality such as user management, service management, security monitoring, and audit information.
+
+> ⚠️ **Security Note:** These credentials are intended only for local demonstration/testing. Hard-coded credentials should never be used in a production environment.
+
+---
+
+# 📖 FastAPI API Documentation
+
+FastAPI provides interactive Swagger API documentation.
+
+After running the application, it can be accessed at:
+
+```text
 http://127.0.0.1:8000/docs
 ```
 
----
-
-# 🔄 Application Workflow
-
-```text id="fxykrv"
-User Registration
-       ↓
-Input Validation
-       ↓
-Password Hashing
-       ↓
-SQLite Database
-       ↓
-User Login
-       ↓
-JWT Generated
-       ↓
-Protected API Request
-       ↓
-Zero Trust Gateway
-       ↓
-JWT + Role + Permission Verification
-       ↓
-Access Granted / Denied
-       ↓
-Security Event Logged
-       ↓
-Monitoring
-       ↓
-Anomaly Detection
-```
-
----
-
-# 📂 Main Project Modules
-
-### Authentication Module
-
-Handles registration, login, password hashing, JWT generation, and authentication.
-
-### Authorization Module
-
-Handles user roles, permissions, and access control.
-
-### Gateway Module
-
-Acts as the central security layer for protected API requests.
-
-### User Management Module
-
-Allows administrators to manage users.
-
-### Service Management Module
-
-Allows administrators to manage protected services.
-
-### Audit Logging Module
-
-Records important security events and activities.
-
-### Monitoring Module
-
-Tracks API requests, gateway health, endpoint usage, service status, and recent activity.
-
-### Anomaly Detection Module
-
-Uses machine learning to identify potentially unusual activity.
+The Swagger interface can be used to inspect and test available API endpoints.
 
 ---
 
 # 🔐 Security Features
 
+The project demonstrates multiple security mechanisms:
+
 * Zero Trust access verification
 * JWT authentication
 * PBKDF2 password hashing
 * Role-Based Access Control
-* Protected API endpoints
-* Admin-only operations
+* Admin and User privileges
+* Protected services
 * Strong password policy
 * Security audit logging
 * API monitoring
-* Access-denied tracking
-* ML-based anomaly detection
+* Security analytics
+* Access control
+* Machine learning-based anomaly detection
 
 ---
 
 # 🎯 Project Objective
 
-The objective of this project is to demonstrate the application of **Zero Trust security principles to API-based systems**.
+The main objective of this project is to demonstrate how **Zero Trust principles can be applied to API-based applications**.
 
-The system combines:
+Instead of relying only on traditional username and password authentication, the system combines:
 
-**Authentication + Authorization + Access Verification + Monitoring + Audit Logging + Anomaly Detection**
+```text
+Authentication
+      +
+Authorization
+      +
+Role-Based Access Control
+      +
+Zero Trust Verification
+      +
+Audit Logging
+      +
+API Monitoring
+      +
+Security Analytics
+      +
+Anomaly Detection
+```
 
-to provide multiple layers of security for protected API services.
+This provides multiple layers of security for accessing protected services.
 
 ---
 
 # 🚀 Future Enhancements
 
-* Multi-Factor Authentication
+The project can be further extended with:
+
+* Multi-Factor Authentication (MFA)
+* OTP verification
 * OAuth2 integration
 * Refresh tokens
 * JWT token revocation
 * API rate limiting
 * HTTPS/TLS
+* API key management
 * Real-time security alerts
+* Advanced anomaly detection
 * SIEM integration
 * Docker deployment
 * Cloud deployment
-* Prometheus and Grafana monitoring
-* Advanced anomaly detection models
+* Redis caching
+* Prometheus monitoring
+* Grafana dashboards
+* Microservice integration
 
 ---
 
 # 📚 Learning Outcomes
 
-The project demonstrates:
+This project demonstrates practical understanding of:
 
 * Zero Trust Architecture
 * API Security
 * Secure Authentication
 * Authorization
-* JWT
-* RBAC
+* JWT Authentication
+* Role-Based Access Control
 * Password Security
 * FastAPI Development
+* SQLAlchemy
 * Database Management
-* Audit Logging
-* Security Monitoring
+* Security Audit Logging
+* API Monitoring
+* Security Analytics
 * Machine Learning for Cybersecurity
 
 ---
