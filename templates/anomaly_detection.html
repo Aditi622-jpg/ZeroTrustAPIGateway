@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ML Anomaly Detection</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .anomaly-page {
+            min-height: 100vh;
+            padding: 35px 20px;
+            background: #07111f;
+        }
+
+        .anomaly-container {
+            width: 100%;
+            max-width: 1250px;
+            margin: 0 auto;
+        }
+
+        .anomaly-header,
+        .anomaly-panel,
+        .evaluation-panel {
+            padding: 24px;
+            background: #0f1b2d;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+            margin-bottom: 22px;
+        }
+
+        .anomaly-header h1,
+        .anomaly-panel h2,
+        .evaluation-panel h2 {
+            color: white;
+        }
+
+        .anomaly-header p {
+            margin-top: 8px;
+            color: #94a3b8;
+        }
+
+        .anomaly-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin: 24px 0;
+        }
+
+        .anomaly-card {
+            padding: 22px;
+            text-align: center;
+            background: #0f1b2d;
+            border: 1px solid #1e293b;
+            border-radius: 14px;
+        }
+
+        .anomaly-card p {
+            color: #94a3b8;
+        }
+
+        .anomaly-card h2 {
+            margin-top: 8px;
+            color: white;
+        }
+
+        .run-button,
+        .back-button {
+            display: inline-block;
+            padding: 12px 18px;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .run-button {
+            background: #7c3aed;
+        }
+
+        .run-button:hover {
+            background: #6d28d9;
+        }
+
+        .back-button {
+            margin-top: 20px;
+            background: #0284c7;
+        }
+
+        .message {
+            margin: 18px 0;
+            padding: 13px;
+            color: #bbf7d0;
+            background: #14532d;
+            border-radius: 8px;
+        }
+
+        .error {
+            margin: 18px 0;
+            padding: 13px;
+            color: #fecaca;
+            background: #7f1d1d;
+            border-radius: 8px;
+        }
+
+        .anomaly-table-wrapper {
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        .anomaly-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .anomaly-table th,
+        .anomaly-table td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .anomaly-table th {
+            color: #7dd3fc;
+            background: #111f33;
+        }
+
+        .anomaly-table td {
+            color: #cbd5e1;
+        }
+
+        .normal-result {
+            color: #86efac;
+            font-weight: bold;
+        }
+
+        .anomaly-result {
+            color: #fca5a5;
+            font-weight: bold;
+        }
+
+        /* Model Evaluation */
+
+        .evaluation-heading {
+            margin-bottom: 8px;
+        }
+
+        .evaluation-description {
+            color: #94a3b8;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .evaluation-notice {
+            padding: 14px;
+            margin-bottom: 22px;
+            background: #172554;
+            border: 1px solid #1d4ed8;
+            border-radius: 10px;
+            color: #bfdbfe;
+            line-height: 1.6;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: #111f33;
+            border: 1px solid #26364d;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .metric-card p {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        .metric-card h2 {
+            color: #7dd3fc;
+            margin-top: 10px;
+            font-size: 27px;
+        }
+
+        .evaluation-subheading {
+            color: #7dd3fc;
+            margin: 25px 0 15px;
+        }
+
+        .confusion-wrapper {
+            overflow-x: auto;
+        }
+
+        .confusion-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        .confusion-table th,
+        .confusion-table td {
+            padding: 16px;
+            border: 1px solid #26364d;
+            color: #cbd5e1;
+        }
+
+        .confusion-table th {
+            background: #172b45;
+            color: #7dd3fc;
+        }
+
+        .confusion-table td {
+            background: #111f33;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .chart-box {
+            padding: 20px;
+            background: #111f33;
+            border: 1px solid #26364d;
+            border-radius: 12px;
+            min-width: 0;
+        }
+
+        .chart-box h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 280px;
+        }
+
+        .evaluation-footer {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        .no-evaluation {
+            color: #fbbf24;
+            padding: 15px;
+            background: #422006;
+            border-radius: 8px;
+        }
+
+        @media screen and (max-width: 850px) {
+            .metric-grid,
+            .chart-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media screen and (max-width: 700px) {
+            .anomaly-stats,
+            .metric-grid,
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="anomaly-page">
+
+    <div class="anomaly-container">
+
+        <!-- PAGE HEADER -->
+
+        <header class="anomaly-header">
+
+            <h1>Machine Learning Anomaly Detection</h1>
+
+            <p>
+                Isolation Forest analyses API activity, failed logins,
+                denied requests and rate-limit events to identify
+                potentially suspicious user behaviour.
+            </p>
+
+        </header>
+
+
+        <!-- SUCCESS / ERROR MESSAGES -->
+
+        {% if message %}
+            <div class="message">
+                {{ message }}
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+
+        <!-- ANOMALY STATISTICS -->
+
+        <section class="anomaly-stats">
+
+            <div class="anomaly-card">
+                <p>Users Analysed</p>
+                <h2>{{ total_results }}</h2>
+            </div>
+
+            <div class="anomaly-card">
+                <p>Normal Activities</p>
+                <h2>{{ normal_count }}</h2>
+            </div>
+
+            <div class="anomaly-card">
+                <p>Anomalies Detected</p>
+                <h2>{{ anomaly_count }}</h2>
+            </div>
+
+        </section>
+
+
+        <!-- LIVE ANOMALY DETECTION -->
+
+        <section class="anomaly-panel">
+
+            <h2>Live Activity Analysis</h2>
+
+            <p class="evaluation-description">
+                Analyse recorded API activity and identify
+                unusual access patterns using Isolation Forest.
+            </p>
+
+            <form
+                action="/gateway/anomaly-detection/run"
+                method="post"
+            >
+
+                <button type="submit" class="run-button">
+                    Run ML Detection
+                </button>
+
+            </form>
+
+
+            <div class="anomaly-table-wrapper">
+
+                <table class="anomaly-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Username</th>
+                            <th>Total Requests</th>
+                            <th>Denied</th>
+                            <th>Failed Logins</th>
+                            <th>Rate Limited</th>
+                            <th>Endpoints</th>
+                            <th>ML Result</th>
+                            <th>Score</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for result in results %}
+
+                            <tr>
+
+                                <td>{{ result.username }}</td>
+
+                                <td>{{ result.total_requests }}</td>
+
+                                <td>{{ result.denied_requests }}</td>
+
+                                <td>{{ result.failed_logins }}</td>
+
+                                <td>{{ result.rate_limited_requests }}</td>
+
+                                <td>{{ result.unique_endpoints }}</td>
+
+                                <td>
+
+                                    {% if result.result == "Anomaly" %}
+
+                                        <span class="anomaly-result">
+                                            Anomaly
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="normal-result">
+                                            Normal
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <td>{{ result.anomaly_score }}</td>
+
+                            </tr>
+
+                        {% else %}
+
+                            <tr>
+                                <td colspan="8">
+                                    Run detection to generate results.
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- ML MODEL PERFORMANCE EVALUATION -->
+
+        <section class="evaluation-panel">
+
+            <h2 class="evaluation-heading">
+                ML Model Performance Evaluation
+            </h2>
+
+            <p class="evaluation-description">
+                Performance evaluation of the Isolation Forest
+                anomaly detection model using a labelled test dataset.
+            </p>
+
+
+            {% if evaluation and evaluation.success %}
+
+                <div class="evaluation-notice">
+
+                    <strong>Evaluation Method:</strong>
+                    {{ evaluation.evaluation_type }}
+
+                    <br>
+
+                    <strong>Algorithm:</strong>
+                    {{ evaluation.algorithm }}
+
+                    <br>
+
+                    <strong>Total Test Samples:</strong>
+                    {{ evaluation.total_test_samples }}
+
+                    <br>
+
+                    <strong>Normal Samples:</strong>
+                    {{ evaluation.normal_samples }}
+
+                    <br>
+
+                    <strong>Suspicious Samples:</strong>
+                    {{ evaluation.attack_samples }}
+
+                </div>
+
+
+                <!-- PERFORMANCE METRICS -->
+
+                <div class="metric-grid">
+
+                    <div class="metric-card">
+                        <p>Accuracy</p>
+                        <h2>{{ evaluation.accuracy }}%</h2>
+                    </div>
+
+                    <div class="metric-card">
+                        <p>Precision</p>
+                        <h2>{{ evaluation.precision }}%</h2>
+                    </div>
+
+                    <div class="metric-card">
+                        <p>Recall</p>
+                        <h2>{{ evaluation.recall }}%</h2>
+                    </div>
+
+                    <div class="metric-card">
+                        <p>F1 Score</p>
+                        <h2>{{ evaluation.f1_score }}%</h2>
+                    </div>
+
+                    <div class="metric-card">
+                        <p>False Positive Rate</p>
+                        <h2>{{ evaluation.false_positive_rate }}%</h2>
+                    </div>
+
+                    <div class="metric-card">
+                        <p>ROC-AUC</p>
+                        <h2>{{ evaluation.roc_auc }}%</h2>
+                    </div>
+
+                </div>
+
+
+                <!-- CONFUSION MATRIX -->
+
+                <h3 class="evaluation-subheading">
+                    Confusion Matrix
+                </h3>
+
+                <div class="confusion-wrapper">
+
+                    <table class="confusion-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>Actual / Predicted</th>
+                                <th>Normal</th>
+                                <th>Suspicious</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+
+                                <th>Normal</th>
+
+                                <td>
+                                    {{ evaluation.confusion_matrix.true_negative }}
+                                    <br>
+                                    <small>True Negative</small>
+                                </td>
+
+                                <td>
+                                    {{ evaluation.confusion_matrix.false_positive }}
+                                    <br>
+                                    <small>False Positive</small>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <th>Suspicious</th>
+
+                                <td>
+                                    {{ evaluation.confusion_matrix.false_negative }}
+                                    <br>
+                                    <small>False Negative</small>
+                                </td>
+
+                                <td>
+                                    {{ evaluation.confusion_matrix.true_positive }}
+                                    <br>
+                                    <small>True Positive</small>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- ROC AND PRECISION-RECALL CURVES -->
+
+                <div class="chart-grid">
+
+                    <div class="chart-box">
+
+                        <h3>ROC Curve</h3>
+
+                        <div class="chart-container">
+
+                            <canvas id="rocChart"></canvas>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="chart-box">
+
+                        <h3>Precision-Recall Curve</h3>
+
+                        <div class="chart-container">
+
+                            <canvas id="prChart"></canvas>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <p class="evaluation-footer">
+
+                    Note: These performance metrics are calculated
+                    using a separate synthetic labelled dataset.
+                    They demonstrate the model evaluation process
+                    and should not be interpreted as verified
+                    real-world performance on live API traffic.
+
+                </p>
+
+
+            {% elif evaluation and not evaluation.success %}
+
+                <div class="no-evaluation">
+
+                    Model evaluation could not be completed:
+
+                    {{ evaluation.message }}
+
+                </div>
+
+            {% else %}
+
+                <div class="no-evaluation">
+
+                    Model evaluation data is not available.
+                    Please check the backend evaluation function.
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- BACK BUTTON -->
+
+        <a
+            href="/gateway/admin-service"
+            class="back-button"
+        >
+            Back to Admin Panel
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- CHART GENERATION -->
+
+{% if evaluation and evaluation.success %}
+
+<script>
+
+    const rocData = {{ evaluation.roc_curve | tojson }};
+
+    const prData = {{ evaluation.precision_recall_curve | tojson }};
+
+
+    // ROC Curve
+
+    new Chart(document.getElementById("rocChart"), {
+
+        type: "line",
+
+        data: {
+
+            datasets: [
+
+                {
+                    label: "ROC Curve",
+
+                    data: rocData.fpr.map((value, index) => ({
+                        x: value,
+                        y: rocData.tpr[index]
+                    })),
+
+                    borderColor: "#38bdf8",
+
+                    backgroundColor: "rgba(56, 189, 248, 0.15)",
+
+                    borderWidth: 2,
+
+                    pointRadius: 2,
+
+                    tension: 0.2
+                },
+
+                {
+                    label: "Random Classifier",
+
+                    data: [
+                        { x: 0, y: 0 },
+                        { x: 1, y: 1 }
+                    ],
+
+                    borderColor: "#64748b",
+
+                    borderDash: [6, 6],
+
+                    pointRadius: 0,
+
+                    borderWidth: 1
+                }
+
+            ]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            scales: {
+
+                x: {
+                    type: "linear",
+                    min: 0,
+                    max: 1,
+                    title: {
+                        display: true,
+                        text: "False Positive Rate",
+                        color: "#cbd5e1"
+                    },
+                    ticks: {
+                        color: "#94a3b8"
+                    }
+                },
+
+                y: {
+                    min: 0,
+                    max: 1,
+                    title: {
+                        display: true,
+                        text: "True Positive Rate",
+                        color: "#cbd5e1"
+                    },
+                    ticks: {
+                        color: "#94a3b8"
+                    }
+                }
+
+            },
+
+            plugins: {
+
+                legend: {
+                    labels: {
+                        color: "#cbd5e1"
+                    }
+                }
+
+            }
+
+        }
+
+    });
+
+
+    // Precision-Recall Curve
+
+    new Chart(document.getElementById("prChart"), {
+
+        type: "line",
+
+        data: {
+
+            datasets: [
+
+                {
+                    label: "Precision-Recall Curve",
+
+                    data: prData.recall.map((value, index) => ({
+                        x: value,
+                        y: prData.precision[index]
+                    })),
+
+                    borderColor: "#a78bfa",
+
+                    backgroundColor: "rgba(167, 139, 250, 0.15)",
+
+                    borderWidth: 2,
+
+                    pointRadius: 2,
+
+                    tension: 0.2
+                }
+
+            ]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            scales: {
+
+                x: {
+                    type: "linear",
+                    min: 0,
+                    max: 1,
+                    title: {
+                        display: true,
+                        text: "Recall",
+                        color: "#cbd5e1"
+                    },
+                    ticks: {
+                        color: "#94a3b8"
+                    }
+                },
+
+                y: {
+                    min: 0,
+                    max: 1,
+                    title: {
+                        display: true,
+                        text: "Precision",
+                        color: "#cbd5e1"
+                    },
+                    ticks: {
+                        color: "#94a3b8"
+                    }
+                }
+
+            },
+
+            plugins: {
+
+                legend: {
+                    labels: {
+                        color: "#cbd5e1"
+                    }
+                }
+
+            }
+
+        }
+
+    });
+
+</script>
+
+{% endif %}
+
+</body>
+</html>

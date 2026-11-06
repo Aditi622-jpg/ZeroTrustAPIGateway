@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Zero Trust Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <div class="dashboard-card">
+
+            <h1>Zero Trust Dashboard</h1>
+
+            <div class="security-badge">
+                ✓ Access Granted
+            </div>
+
+            <h2>
+                Welcome, {{ username }}
+            </h2>
+
+            <p>
+                Your identity has been successfully verified through
+                the Zero Trust API Gateway.
+            </p>
+
+            <div class="user-information">
+
+                <p>
+                    <strong>Username :</strong>
+                    {{ username }}
+                </p>
+
+                <p>
+                    <strong>Role :</strong>
+                    {{ role }}
+                </p>
+
+                <p>
+                    <strong>Authentication :</strong>
+                    JWT Token Verified
+                </p>
+
+                <p>
+                    <strong>Gateway :</strong>
+                    Online
+                </p>
+
+                <p>
+                    <strong>Zero Trust Status :</strong>
+                    Authorized
+                </p>
+
+            </div>
+
+            <div class="gateway-options">
+
+                <a
+                    href="/gateway/status"
+                    class="gateway-button"
+                >
+                    Gateway Status
+                </a>
+
+                <a
+                    href="/gateway/user-service"
+                    class="gateway-button"
+                >
+                    User Service
+                </a>
+
+                <a
+                    href="/gateway/admin-service"
+                    class="admin-button"
+                >
+                    Admin Control Panel
+                </a>
+
+                <a
+                    href="/gateway/audit-logs"
+                    class="gateway-button"
+                >
+                    Security Audit Logs
+                </a>
+
+                <a
+                    href="/gateway/monitoring"
+                    class="admin-button"
+                >
+                    API Monitoring Dashboard
+                </a>
+
+                <a
+                    href="/logout"
+                    class="logout-button"
+                >
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

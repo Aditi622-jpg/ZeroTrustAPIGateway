@@ -1,0 +1,181 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification | Zero Trust API Gateway</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #101827, #1e3a5f);
+            color: #ffffff;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 420px;
+            padding: 40px 30px;
+            background: #ffffff;
+            color: #1f2937;
+            border-radius: 14px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .icon {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            margin-bottom: 12px;
+            color: #172554;
+        }
+
+        .description {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .otp-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 22px;
+            text-align: center;
+            letter-spacing: 12px;
+            outline: none;
+            margin-bottom: 20px;
+        }
+
+        .otp-input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        .resend {
+            margin-top: 22px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .resend button {
+            margin-top: 10px;
+            background: transparent;
+            color: #2563eb;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .resend button:hover {
+            text-decoration: underline;
+            background: transparent;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #64748b;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: #2563eb;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="icon">🔐</div>
+
+        <h2>OTP Verification</h2>
+
+        <p class="description">
+            A six-digit verification code has been sent to your registered
+            email address. Enter the code below to complete your login.
+        </p>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form action="/verify-otp" method="POST">
+
+            <input
+                type="text"
+                name="otp"
+                class="otp-input"
+                placeholder="000000"
+                maxlength="6"
+                pattern="[0-9]{6}"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                required
+                autofocus
+            >
+
+            <button type="submit">Verify OTP</button>
+
+        </form>
+
+        <div class="resend">
+            Didn't receive the code?
+
+            <form action="/resend-otp" method="POST">
+                <button type="submit">Resend OTP</button>
+            </form>
+        </div>
+
+        <a href="/login-page" class="back-link">
+            Back to Login
+        </a>
+
+    </div>
+
+</body>
+</html>
+```

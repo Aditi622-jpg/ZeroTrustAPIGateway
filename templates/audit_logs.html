@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Security Audit Logs</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+
+    <style>
+        .security-log-page {
+            min-height: 100vh;
+            padding: 35px 20px;
+            background:
+                radial-gradient(
+                    circle at top right,
+                    rgba(14, 165, 233, 0.15),
+                    transparent 35%
+                ),
+                #07111f;
+        }
+
+        .security-log-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .security-log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 25px;
+            background: #0f1b2d;
+            border: 1px solid #1e3a5f;
+            border-radius: 16px;
+        }
+
+        .security-log-header h1 {
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        .security-log-header p {
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .admin-info-box {
+            min-width: 160px;
+            padding: 15px;
+            text-align: center;
+            background: #111f33;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+        }
+
+        .admin-info-box strong {
+            display: block;
+            color: white;
+        }
+
+        .admin-info-box span {
+            display: block;
+            margin-top: 5px;
+            color: #c084fc;
+            font-size: 13px;
+        }
+
+        .log-statistics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin: 24px 0;
+        }
+
+        .log-stat-card {
+            padding: 22px;
+            text-align: center;
+            background: #0f1b2d;
+            border: 1px solid #1e293b;
+            border-radius: 14px;
+        }
+
+        .log-stat-card p {
+            margin-bottom: 8px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .log-stat-card h2 {
+            color: white;
+            font-size: 28px;
+        }
+
+        .log-stat-card.allowed {
+            border-color: #166534;
+        }
+
+        .log-stat-card.denied {
+            border-color: #991b1b;
+        }
+
+        .log-stat-card.success {
+            border-color: #075985;
+        }
+
+        .filter-panel {
+            margin-bottom: 18px;
+            padding: 22px;
+            background: #0f1b2d;
+            border: 1px solid #1e293b;
+            border-radius: 14px;
+        }
+
+        .filter-panel form {
+            display: flex;
+            align-items: end;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #cbd5e1;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 12px;
+            color: white;
+            background: #111f33;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            border-color: #38bdf8;
+        }
+
+        .filter-button,
+        .clear-button,
+        .export-button,
+        .back-button-log {
+            display: inline-block;
+            padding: 12px 18px;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .filter-button {
+            background: #0284c7;
+        }
+
+        .filter-button:hover {
+            background: #0369a1;
+        }
+
+        .clear-button {
+            background: #475569;
+        }
+
+        .clear-button:hover {
+            background: #334155;
+        }
+
+        .export-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin: 0 0 20px;
+        }
+
+        .export-button {
+            background: #16a34a;
+        }
+
+        .export-button:hover {
+            background: #15803d;
+        }
+
+        .back-button-log {
+            margin-top: 22px;
+            background: #7c3aed;
+        }
+
+        .back-button-log:hover {
+            background: #6d28d9;
+        }
+
+        .log-table-wrapper {
+            overflow-x: auto;
+            background: #0f1b2d;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+        }
+
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .log-table th,
+        .log-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .log-table th {
+            color: #7dd3fc;
+            background: #111f33;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        .log-table td {
+            color: #cbd5e1;
+        }
+
+        .log-table tbody tr:hover {
+            background: #111f33;
+        }
+
+        .log-status {
+            display: inline-block;
+            min-width: 80px;
+            padding: 6px 11px;
+            text-align: center;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .log-status.allowed {
+            color: #86efac;
+            background: rgba(22, 101, 52, 0.4);
+            border: 1px solid #166534;
+        }
+
+        .log-status.denied,
+        .log-status.failed {
+            color: #fca5a5;
+            background: rgba(127, 29, 29, 0.45);
+            border: 1px solid #991b1b;
+        }
+
+        .log-status.success {
+            color: #7dd3fc;
+            background: rgba(7, 89, 133, 0.45);
+            border: 1px solid #075985;
+        }
+
+        .empty-logs {
+            padding: 35px !important;
+            text-align: center !important;
+            color: #64748b !important;
+        }
+
+        @media screen and (max-width: 900px) {
+            .log-statistics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .security-log-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .admin-info-box {
+                width: 100%;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            .log-statistics {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-panel form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .export-actions {
+                justify-content: stretch;
+            }
+
+            .export-button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="security-log-page">
+
+        <div class="security-log-container">
+
+            <header class="security-log-header">
+
+                <div>
+                    <p class="page-label">
+                        Zero Trust Security Monitoring
+                    </p>
+
+                    <h1>
+                        Security Audit Logs
+                    </h1>
+
+                    <p>
+                        Review user authentication, gateway access,
+                        denied requests and administrative activity.
+                    </p>
+                </div>
+
+                <div class="admin-info-box">
+                    <strong>{{ username }}</strong>
+                    <span>{{ role }}</span>
+                </div>
+
+            </header>
+
+            <section class="log-statistics">
+
+                <div class="log-stat-card">
+                    <p>Total Logs</p>
+                    <h2>{{ total_logs }}</h2>
+                </div>
+
+                <div class="log-stat-card allowed">
+                    <p>Allowed Events</p>
+                    <h2>{{ allowed_logs }}</h2>
+                </div>
+
+                <div class="log-stat-card denied">
+                    <p>Denied Events</p>
+                    <h2>{{ denied_logs }}</h2>
+                </div>
+
+                <div class="log-stat-card success">
+                    <p>Successful Events</p>
+                    <h2>{{ success_logs }}</h2>
+                </div>
+
+            </section>
+
+            <section class="filter-panel">
+
+                <form
+                    method="get"
+                    action="/gateway/audit-logs"
+                >
+
+                    <div class="filter-group">
+
+                        <label for="username">
+                            Search by username
+                        </label>
+
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Enter username"
+                            value="{{ search_username }}"
+                        >
+
+                    </div>
+
+                    <div class="filter-group">
+
+                        <label for="status_filter">
+                            Filter by status
+                        </label>
+
+                        <select
+                            id="status_filter"
+                            name="status_filter"
+                        >
+
+                            <option value="">
+                                All statuses
+                            </option>
+
+                            <option
+                                value="Allowed"
+                                {% if selected_status == "Allowed" %}
+                                selected
+                                {% endif %}
+                            >
+                                Allowed
+                            </option>
+
+                            <option
+                                value="Denied"
+                                {% if selected_status == "Denied" %}
+                                selected
+                                {% endif %}
+                            >
+                                Denied
+                            </option>
+
+                            <option
+                                value="Success"
+                                {% if selected_status == "Success" %}
+                                selected
+                                {% endif %}
+                            >
+                                Success
+                            </option>
+
+                            <option
+                                value="Failed"
+                                {% if selected_status == "Failed" %}
+                                selected
+                                {% endif %}
+                            >
+                                Failed
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="filter-button"
+                    >
+                        Apply Filter
+                    </button>
+
+                    <a
+                        href="/gateway/audit-logs"
+                        class="clear-button"
+                    >
+                        Clear
+                    </a>
+
+                </form>
+
+            </section>
+
+            <div class="export-actions">
+
+                <a
+                    href="/gateway/audit-logs/export-csv"
+                    class="export-button"
+                >
+                    Export Audit Report
+                </a>
+
+            </div>
+
+            <section class="log-table-wrapper">
+
+                <table class="log-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Action</th>
+                            <th>Status</th>
+                            <th>Date and Time</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for log in logs %}
+
+                        <tr>
+
+                            <td>{{ log.id }}</td>
+
+                            <td>{{ log.username }}</td>
+
+                            <td>{{ log.action }}</td>
+
+                            <td>
+
+                                {% if log.status == "Allowed" %}
+
+                                    <span class="log-status allowed">
+                                        {{ log.status }}
+                                    </span>
+
+                                {% elif log.status == "Denied" %}
+
+                                    <span class="log-status denied">
+                                        {{ log.status }}
+                                    </span>
+
+                                {% elif log.status == "Failed" %}
+
+                                    <span class="log-status failed">
+                                        {{ log.status }}
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="log-status success">
+                                        {{ log.status }}
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+                                {% if log.timestamp %}
+                                    {{ log.timestamp.strftime("%d-%m-%Y %H:%M:%S") }}
+                                {% else %}
+                                    NA
+                                {% endif %}
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+                            <td
+                                colspan="5"
+                                class="empty-logs"
+                            >
+                                No security logs match the selected filters.
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+            <a
+                href="/dashboard"
+                class="back-button-log"
+            >
+                Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

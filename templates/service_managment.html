@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Service Management</title>
+
+    <link rel="stylesheet"
+          href="/static/style.css">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon admin-brand">
+                SM
+            </div>
+
+            <div>
+                <h2>Service Management</h2>
+                <p>Zero Trust Gateway</p>
+            </div>
+
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a href="/dashboard" class="menu-item">
+                Dashboard
+            </a>
+
+            <a href="/gateway/admin-service" class="menu-item">
+                Admin Panel
+            </a>
+
+            <a href="/gateway/user-management" class="menu-item">
+                User Management
+            </a>
+
+            <a href="/gateway/audit-logs" class="menu-item">
+                Security Logs
+            </a>
+
+            <a href="/gateway/service-management"
+               class="menu-item active">
+                Service Management
+            </a>
+
+            <a href="/logout"
+               class="menu-item logout-menu">
+                Logout
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="page-label">
+                    Administrator
+                </p>
+
+                <h1>
+                    Protected Services
+                </h1>
+
+            </div>
+
+            <div class="admin-badge">
+                Gateway Online
+            </div>
+
+        </header>
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    API
+                </div>
+
+                <div>
+                    <p>Total APIs</p>
+                    <h3>3</h3>
+                    <span class="small-success">
+                        Running
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    GW
+                </div>
+
+                <div>
+                    <p>Gateway</p>
+                    <h3>Online</h3>
+                    <span class="small-success">
+                        Healthy
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    JWT
+                </div>
+
+                <div>
+                    <p>Authentication</p>
+                    <h3>Verified</h3>
+                    <span class="small-success">
+                        Secure
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    RB
+                </div>
+
+                <div>
+                    <p>RBAC</p>
+                    <h3>Enabled</h3>
+                    <span class="small-success">
+                        Active
+                    </span>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="panel">
+
+            <h2>
+                Protected Microservices
+            </h2>
+
+            <table class="audit-table">
+
+                <thead>
+
+                <tr>
+                    <th>Service</th>
+                    <th>Status</th>
+                    <th>Authentication</th>
+                    <th>Authorization</th>
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                <tr>
+                    <td>User Service</td>
+                    <td>
+                        <span class="small-success">
+                            Online
+                        </span>
+                    </td>
+                    <td>JWT</td>
+                    <td>Verified</td>
+                </tr>
+
+                <tr>
+                    <td>Admin Service</td>
+                    <td>
+                        <span class="small-success">
+                            Online
+                        </span>
+                    </td>
+                    <td>JWT</td>
+                    <td>Administrator Only</td>
+                </tr>
+
+                <tr>
+                    <td>Audit Log Service</td>
+                    <td>
+                        <span class="small-success">
+                            Online
+                        </span>
+                    </td>
+                    <td>JWT</td>
+                    <td>Administrator Only</td>
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+        <section class="panel">
+
+            <h2>
+                Zero Trust Status
+            </h2>
+
+            <div class="security-row">
+                <span>Gateway Status</span>
+                <strong class="text-success">
+                    Active
+                </strong>
+            </div>
+
+            <div class="security-row">
+                <span>User Authentication</span>
+                <strong class="text-success">
+                    JWT Verified
+                </strong>
+            </div>
+
+            <div class="security-row">
+                <span>Role Verification</span>
+                <strong class="text-success">
+                    Passed
+                </strong>
+            </div>
+
+            <div class="security-row">
+                <span>Protected APIs</span>
+                <strong>
+                    3
+                </strong>
+            </div>
+
+            <div class="zero-trust-note purple-note">
+
+                Every request is authenticated,
+                authorized and verified before
+                access is granted to any service.
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

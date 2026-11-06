@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon admin-brand">US</div>
+
+            <div>
+                <h2>User Management</h2>
+                <p>Zero Trust Gateway</p>
+            </div>
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a href="/dashboard" class="menu-item">
+                Dashboard
+            </a>
+
+            <a href="/gateway/admin-service" class="menu-item">
+                Admin Panel
+            </a>
+
+            <a href="/gateway/audit-logs" class="menu-item">
+                Security Logs
+            </a>
+
+            <a href="/gateway/user-management" class="menu-item active">
+                User Management
+            </a>
+
+            <a href="/logout" class="menu-item logout-menu">
+                Logout
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+                <p class="page-label">Administrator</p>
+                <h1>Registered Users</h1>
+            </div>
+
+            <div class="admin-badge">
+                Admin Access
+            </div>
+
+        </header>
+
+        <section class="panel">
+
+            <h2>System Users</h2>
+
+            <table class="audit-table">
+
+                <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for user in users %}
+
+                <tr>
+
+                    <td>{{ user.id }}</td>
+
+                    <td>{{ user.username }}</td>
+
+                    <td>{{ user.role }}</td>
+
+                    <td>
+                        <span class="small-success">
+                            Active
+                        </span>
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

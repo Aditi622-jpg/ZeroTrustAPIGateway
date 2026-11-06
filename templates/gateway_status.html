@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Gateway Status</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+</head>
+
+<body>
+
+    <div class="app-layout">
+
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">ZT</div>
+
+                <div>
+                    <h2>ZeroTrust</h2>
+                    <p>API Gateway</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <a href="/dashboard" class="menu-item">
+                    Dashboard
+                </a>
+
+                <a href="/gateway/status" class="menu-item active">
+                    Gateway Status
+                </a>
+
+                <a href="/gateway/user-service" class="menu-item">
+                    User Service
+                </a>
+
+                <a href="/gateway/admin-service" class="menu-item">
+                    Admin Panel
+                </a>
+
+                <a href="/logout" class="menu-item logout-menu">
+                    Logout
+                </a>
+
+            </nav>
+
+        </aside>
+
+        <main class="main-content">
+
+            <header class="topbar">
+
+                <div>
+                    <p class="page-label">System Monitoring</p>
+                    <h1>Gateway Status</h1>
+                </div>
+
+                <a href="/dashboard" class="back-button">
+                    Back to Dashboard
+                </a>
+
+            </header>
+
+            <section class="gateway-hero">
+
+                <div class="gateway-ring">
+                    <div>
+                        <strong>100%</strong>
+                        <span>Secure</span>
+                    </div>
+                </div>
+
+                <div>
+                    <span class="status-pill success">
+                        Gateway Operational
+                    </span>
+
+                    <h2>All security checks passed</h2>
+
+                    <p>
+                        The request passed authentication, authorization,
+                        identity and role verification.
+                    </p>
+                </div>
+
+            </section>
+
+            <section class="stats-grid">
+
+                <div class="status-card">
+                    <span class="status-dot"></span>
+                    <p>Gateway</p>
+                    <h3>{{ gateway_status }}</h3>
+                </div>
+
+                <div class="status-card">
+                    <span class="status-dot"></span>
+                    <p>Authentication</p>
+                    <h3>{{ authentication_status }}</h3>
+                </div>
+
+                <div class="status-card">
+                    <span class="status-dot"></span>
+                    <p>Authorization</p>
+                    <h3>{{ authorization_status }}</h3>
+                </div>
+
+                <div class="status-card">
+                    <span class="status-dot"></span>
+                    <p>Identity Trust</p>
+                    <h3>{{ trust_status }}</h3>
+                </div>
+
+            </section>
+
+            <section class="panel">
+
+                <div class="panel-heading">
+                    <div>
+                        <p class="page-label">Verification Pipeline</p>
+                        <h2>Zero Trust Request Validation</h2>
+                    </div>
+                </div>
+
+                <div class="verification-flow">
+
+                    <div class="verification-step">
+                        <span>1</span>
+                        <h3>Request Received</h3>
+                        <p>Gateway receives the protected request.</p>
+                    </div>
+
+                    <div class="flow-line"></div>
+
+                    <div class="verification-step">
+                        <span>2</span>
+                        <h3>JWT Checked</h3>
+                        <p>Token signature and expiry are verified.</p>
+                    </div>
+
+                    <div class="flow-line"></div>
+
+                    <div class="verification-step">
+                        <span>3</span>
+                        <h3>Role Verified</h3>
+                        <p>User permissions are checked using RBAC.</p>
+                    </div>
+
+                    <div class="flow-line"></div>
+
+                    <div class="verification-step">
+                        <span>4</span>
+                        <h3>Access Granted</h3>
+                        <p>Verified request reaches the service.</p>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,428 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>IP Access Management | Zero Trust Gateway</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #07111f;
+            color: #ffffff;
+            padding: 35px 25px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        /* PAGE HEADER */
+
+        h1 {
+            color: #ffffff;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #8ba4c7;
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+
+        /* CARDS */
+
+        .card {
+            background: #101d30;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid #1e2c42;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.15);
+        }
+
+        h2 {
+            color: #ffffff;
+            margin-bottom: 20px;
+            font-size: 19px;
+        }
+
+        /* FORM */
+
+        label {
+            display: block;
+            color: #a8bdd9;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 7px;
+            font-size: 14px;
+            margin-bottom: 17px;
+
+            background: #0b1728;
+            border: 1px solid #293c56;
+            color: #ffffff;
+
+            outline: none;
+            transition: border 0.2s ease;
+        }
+
+        input:focus {
+            border-color: #8b3ff2;
+            box-shadow: 0 0 0 2px rgba(139, 63, 242, 0.15);
+        }
+
+        input::placeholder {
+            color: #647b9a;
+        }
+
+        /* BUTTONS */
+
+        button {
+            padding: 11px 17px;
+            border: none;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            transition: 0.2s ease;
+        }
+
+        button:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        .block-btn {
+            background: linear-gradient(135deg, #8138ed, #a044f5);
+        }
+
+        .unblock-btn {
+            background: #087f65;
+        }
+
+        /* MESSAGES */
+
+        .message {
+            padding: 13px 16px;
+            border-radius: 7px;
+            margin-bottom: 18px;
+
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #4ade80;
+
+            font-size: 13px;
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+
+        /* TABLE */
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            min-width: 700px;
+        }
+
+        th,
+        td {
+            padding: 15px 12px;
+            text-align: left;
+            border-bottom: 1px solid #26364c;
+            font-size: 13px;
+        }
+
+        th {
+            background: #14243a;
+            color: #45c5ff;
+            font-weight: bold;
+        }
+
+        td {
+            color: #b6c8e0;
+        }
+
+        tbody tr:hover {
+            background: #14243a;
+        }
+
+        /* STATUS */
+
+        .active {
+            color: #f87171;
+            font-weight: bold;
+        }
+
+        .inactive {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        /* BACK LINK */
+
+        .back-link {
+            display: inline-block;
+            margin-top: 8px;
+            color: #45baff;
+            text-decoration: none;
+            font-size: 13px;
+            transition: 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: #a56aff;
+            text-decoration: underline;
+        }
+
+        /* RESPONSIVE DESIGN */
+
+        @media (max-width: 650px) {
+
+            body {
+                padding: 20px 12px;
+            }
+
+            h1 {
+                font-size: 23px;
+            }
+
+            .card {
+                padding: 18px;
+                overflow: hidden;
+            }
+
+            th,
+            td {
+                padding: 12px 10px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>IP-Based Access Control</h1>
+
+    <p class="subtitle">
+        Manage blocked IP addresses and monitor network access policies.
+    </p>
+
+    {% if request.query_params.get("message") %}
+        <div class="message">
+            {{ request.query_params.get("message") }}
+        </div>
+    {% endif %}
+
+    {% if request.query_params.get("error") %}
+        <div class="message error">
+            {{ request.query_params.get("error") }}
+        </div>
+    {% endif %}
+
+
+    <!-- BLOCK IP ADDRESS -->
+
+    <div class="card">
+
+        <h2>Block an IP Address</h2>
+
+        <form action="/gateway/block-ip" method="POST">
+
+            <label for="ip_address">
+                IP Address
+            </label>
+
+            <input
+                type="text"
+                id="ip_address"
+                name="ip_address"
+                placeholder="Example: 203.0.113.10"
+                required
+            >
+
+            <label for="reason">
+                Reason for Blocking
+            </label>
+
+            <input
+                type="text"
+                id="reason"
+                name="reason"
+                placeholder="Enter reason for blocking"
+            >
+
+            <button type="submit" class="block-btn">
+                Block IP Address
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- IP ACCESS CONTROL RECORDS -->
+
+    <div class="card">
+
+        <h2>IP Access Control Records</h2>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>IP Address</th>
+                        <th>Reason</th>
+                        <th>Blocked By</th>
+                        <th>Date Created</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for ip in blocked_ips %}
+
+                    <tr>
+
+                        <td>
+                            {{ ip.ip_address }}
+                        </td>
+
+                        <td>
+                            {{ ip.reason or "Not specified" }}
+                        </td>
+
+                        <td>
+                            {{ ip.blocked_by }}
+                        </td>
+
+                        <td>
+                            {{ ip.created_at.strftime("%d-%m-%Y %H:%M")
+                               if ip.created_at else "N/A" }}
+                        </td>
+
+                        <td>
+
+                            {% if ip.is_active %}
+
+                                <span class="active">
+                                    Blocked
+                                </span>
+
+                            {% else %}
+
+                                <span class="inactive">
+                                    Unblocked
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {% if ip.is_active %}
+
+                                <form
+                                    action="/gateway/unblock-ip/{{ ip.id }}"
+                                    method="POST"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="unblock-btn"
+                                    >
+                                        Unblock
+                                    </button>
+
+                                </form>
+
+                            {% else %}
+
+                                <span class="inactive">
+                                    Inactive
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td colspan="6">
+                            No IP access control records found.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <a
+        href="/gateway/admin-service"
+        class="back-link"
+    >
+        ← Back to Admin Dashboard
+    </a>
+
+</div>
+
+</body>
+
+</html>
+```
