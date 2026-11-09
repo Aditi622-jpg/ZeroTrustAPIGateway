@@ -1,6 +1,6 @@
-# Zero Trust API Gateway Using Microservices
+# Zero Trust API Gateway – Modular Architecture for Secure API Access
 
-A security-focused **Zero Trust API Gateway using a microservices-oriented architecture**, developed using **Python, FastAPI, SQLAlchemy, SQLite, HTML, CSS, Jinja2, JWT Authentication, and Scikit-learn**.
+A security-focused **Zero Trust API Gateway using a modular-oriented architecture**, developed using **Python, FastAPI, SQLAlchemy, SQLite, HTML, CSS, Jinja2, JWT Authentication, and Scikit-learn**.
 
 The project follows the Zero Trust security principle:
 
@@ -20,9 +20,7 @@ Its major responsibilities are organized into separate service components for au
 
 Modern applications rely heavily on APIs for communication between users, applications, databases, and backend services. Improperly protected APIs can expose sensitive resources to unauthorized users.
 
-The **Zero Trust API Gateway using microservices-oriented components** acts as a centralized security layer between users and protected services.
-
-Individual responsibilities such as authentication, access control, administration, audit logging, monitoring, and anomaly detection are separated into dedicated modules/components.
+The **Zero Trust API Gateway using modular-oriented components** acts as a centralized security layer between users and protected services.
 
 When a user attempts to access a protected resource, the gateway performs security checks before deciding whether the request should be allowed or denied.
 
